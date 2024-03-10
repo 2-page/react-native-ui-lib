@@ -34,6 +34,11 @@ export type SectionsWheelPickerProps = PropsWithChildren<{
   textStyle?: TextStyle;
   disableRTL?: boolean;
   testID?: string;
+  /**
+   * ##### 2.page #####
+   * Vibrate function
+   */
+  vibrate?: () => Promise<void>;
 }>;
 
 /**
@@ -43,7 +48,7 @@ export type SectionsWheelPickerProps = PropsWithChildren<{
  */
 
 const SectionsWheelPicker = (props: SectionsWheelPickerProps) => {
-  const {sections, itemHeight, numberOfVisibleRows, activeTextColor, inactiveTextColor, textStyle, disableRTL, testID} =
+  const {sections, itemHeight, numberOfVisibleRows, activeTextColor, inactiveTextColor, textStyle, disableRTL, testID, vibrate} =
     props;
 
   const wheelPickerProps = {
@@ -51,7 +56,8 @@ const SectionsWheelPicker = (props: SectionsWheelPickerProps) => {
     numberOfVisibleRows,
     activeTextColor,
     inactiveTextColor,
-    textStyle
+    textStyle,
+    vibrate
   };
 
   const shouldDisableRTL = useMemo(() => {
