@@ -73,6 +73,11 @@ export interface WheelPickerProps {
    */
   onChange?: (item: string | number, index: number) => void;
   /**
+   * ##### 2.page #####
+   * Vibrate function
+   */
+  vibrate?: () => Promise<void>;
+  /**
    * Container's ViewStyle, height is computed according to itemHeight * numberOfVisibleRows
    */
   style?: Omit<ViewStyle, 'height'>;
@@ -111,6 +116,7 @@ const WheelPicker = ({
   labelStyle,
   labelProps,
   onChange,
+  vibrate,
   align = WheelPickerAlign.CENTER,
   disableRTL,
   style,
@@ -123,9 +129,19 @@ const WheelPicker = ({
 }: WheelPickerProps) => {
   const scrollView = useRef<Animated.ScrollView>();
   const offset = useSharedValue(0);
+  
+  let isVibrating = false;
   const scrollHandler = useAnimatedScrollHandler(e => {
     offset.value = e.contentOffset.y;
+    if (vibrate && !isVibrating && offset.value % itemHeight < 0.1) {
+      isVibrating = true;
+      (async () {
+        await vibrate();
+        isVibrating = false;
+      }) ();
+    }
   });
+  
   const shouldDisableRTL = useMemo(() => {
     return Constants.isRTL && disableRTL;
   }, [disableRTL]);
