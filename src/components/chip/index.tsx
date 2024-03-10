@@ -3,7 +3,7 @@ import React, {useCallback} from 'react';
 import {StyleSheet, StyleProp, ViewStyle, ViewProps, ImageStyle, TextStyle, ImageSourcePropType} from 'react-native';
 import Assets from '../../assets';
 import {asBaseComponent} from '../../commons/new';
-import {BorderRadiuses, Spacings, Colors} from 'style';
+import {BorderRadiuses, Spacings, Colors} from '../../style';
 import Avatar, {AvatarProps} from '../avatar';
 import Badge, {BadgeProps} from '../badge';
 import Text from '../text';
