@@ -135,7 +135,7 @@ const WheelPicker = ({
     offset.value = e.contentOffset.y;
     if (vibrate && !isVibrating && offset.value % itemHeight < 0.1) {
       isVibrating = true;
-      (async () {
+      (async () => {
         await vibrate();
         isVibrating = false;
       }) ();
