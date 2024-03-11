@@ -10,7 +10,7 @@ import {
   ListRenderItemInfo,
   FlatListProps
 } from 'react-native';
-import Animated, {useSharedValue, useAnimatedScrollHandler} from 'react-native-reanimated';
+import Animated, {useSharedValue, useAnimatedScrollHandler, runOnJS} from 'react-native-reanimated';
 import {FlatList} from 'react-native-gesture-handler';
 import {Colors, Spacings} from 'style';
 import {Constants, asBaseComponent} from '../../commons/new';
@@ -130,14 +130,16 @@ const WheelPicker = ({
   const scrollView = useRef<Animated.ScrollView>();
   const offset = useSharedValue(0);
   
-  let isVibrating = false;
+  const vibrateValue = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler(e => {
     offset.value = e.contentOffset.y;
-    if (vibrate && !isVibrating && offset.value % itemHeight < 0.1) {
-      isVibrating = true;
-      (async () => {
-        await vibrate();
-        isVibrating = false;
+
+    const currentVibrateValue = Math.floor(offset.value / itemHeight);
+    if (vibrate && vibrateValue.value != currentVibrateValue) {
+      vibrateValue.value = currentVibrateValue;
+      (() => {
+        'worklet';
+        runOnJS(vibrate)();
       }) ();
     }
   });
